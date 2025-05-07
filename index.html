@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Animation & LocalStorage Example</title>
+  <style>
+    /* Smooth transition for button color */
+    #animateBtn {
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    /* Hover effect */
+    #animateBtn:hover {
+      background-color: #2980b9;
+    }
+    /* Keyframes for pulsing animation */
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    /* Animated state */
+    .animate {
+      animation: pulse 1s infinite;
+    }
+  </style>
+</head>
+<body>
+  <button id="animateBtn">Click to Toggle Animation</button>
+
+  <script>
+    /**
+     * Save a preference (key/value) into localStorage.
+     * @param {string} key 
+     * @param {*} value 
+     */
+    function savePreference(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    /**
+     * Retrieve a preference by key from localStorage.
+     * @param {string} key 
+     * @returns {*}
+     */
+    function getPreference(key) {
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : null;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('animateBtn');
+
+      // On load, apply stored animation state
+      const wasAnimated = getPreference('buttonAnimated');
+      if (wasAnimated) {
+        btn.classList.add('animate');
+      }
+
+      // Toggle animation on click and save state
+      btn.addEventListener('click', () => {
+        const isActive = btn.classList.toggle('animate');
+        savePreference('buttonAnimated', isActive);
+      });
+    });
+  </script>
+</body>
+</html>
